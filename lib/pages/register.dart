@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                         if (response.user != null) {
                           Provider.of<AuthProvider>(context, listen: false).setUser(response.user!);
-                          await prefs.setString("user", "logged");
+                          await prefs.setString("user", response.user!.email!);
                           await prefs.setBool('video', true);
                           Navigator.pushReplacementNamed(context, '/video');
                         }else{

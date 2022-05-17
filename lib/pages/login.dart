@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar/pages/register.dart';
@@ -118,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (response.user != null) {
                           Provider.of<AuthProvider>(context, listen: false).setUser(response.user!);
                           final bool? video = prefs.getBool('video');
-                          await prefs.setString("user", "logged");
+                          await prefs.setString("user", response.user!.email!);
 
                           if(video != null && video){
                             await Navigator.pushReplacementNamed(context, '/home');
