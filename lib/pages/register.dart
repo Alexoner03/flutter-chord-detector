@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/AuthProvider.dart';
+import '../providers/BackendProvider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -125,6 +126,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           Provider.of<AuthProvider>(context, listen: false).setUser(response.user!);
                           await prefs.setString("user", response.user!.email!);
                           await prefs.setBool('video', true);
+                          await Provider.of<BackendProvider>(context, listen: false).createUser(response.user!.email!);
+
                           Navigator.pushReplacementNamed(context, '/video');
                         }else{
                           Utils.showMyDialog(context, "Error", "El email posiblemente esté registrado");

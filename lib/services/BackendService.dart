@@ -2,15 +2,15 @@ import 'package:guitar/models/BackendModels.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
-class BackendProvider {
+class BackendService {
 
-  static const url = "144.217.6.17:8080/api";
+  static const String url = "144.217.6.17:8080";
 
   static Future<UserInfo> getUserByEmail(String email) async {
     Map<String, String> queryParams = {
       'email': email,
     };
-    var url = Uri.http(BackendProvider.url,"/user",queryParams);
+    var url = Uri.http(BackendService.url,"/api/user",queryParams);
 
     var response = await http.get(url);
 
@@ -19,7 +19,7 @@ class BackendProvider {
 
   static Future<UserInfo> createUser(String email) async {
 
-    var url = Uri.http(BackendProvider.url,"/user");
+    var url = Uri.http(BackendService.url,"/api/user");
 
     var response = await http.post(url, body: { email });
 
@@ -28,7 +28,7 @@ class BackendProvider {
 
   static Future<UserInfo> updateChords(String email, List<Sound> chords) async {
 
-    var url = Uri.http(BackendProvider.url,"/user/chords");
+    var url = Uri.http(BackendService.url,"/api/user/chords");
 
     var response = await http.put(url, body: { email, chords });
 
@@ -37,7 +37,7 @@ class BackendProvider {
 
   static Future<UserInfo> updateNotes(String email, List<Sound> notes) async {
 
-    var url = Uri.http(BackendProvider.url,"/user/notes");
+    var url = Uri.http(BackendService.url,"/api/user/notes");
 
     var response = await http.put(url, body: { email, notes });
 
@@ -46,7 +46,7 @@ class BackendProvider {
 
   static Future<UserInfo> updateTests(String email, List<Test> tests) async {
 
-    var url = Uri.http(BackendProvider.url,"/user/tests");
+    var url = Uri.http(BackendService.url,"/api/user/tests");
 
     var response = await http.put(url, body: { email, tests });
 

@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/Dtos.dart';
 import '../providers/AuthProvider.dart';
+import '../providers/BackendProvider.dart';
 import '../services/FirebaseService.dart';
 import '../utils/alert.dart';
 
@@ -32,9 +33,10 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
 
     var str = prefs.getString("user");
+    print(str);
     if(str != null && str.isNotEmpty){
       final bool? video = prefs.getBool('video');
-
+      await Provider.of<BackendProvider>(context, listen: false).getByEmail(str);
       if(video != null && video){
         await Navigator.pushReplacementNamed(context, '/home');
         return;
@@ -115,10 +117,12 @@ class _LoginPageState extends State<LoginPage> {
 
                         if (response.user != null) {
                           Provider.of<AuthProvider>(context, listen: false).setUser(response.user!);
+
                           final bool? video = prefs.getBool('video');
                           await prefs.setString("user", response.user!.email!);
 
                           if(video != null && video){
+                            await Provider.of<BackendProvider>(context, listen: false).getByEmail(response.user!.email!);
                             await Navigator.pushReplacementNamed(context, '/home');
                             return;
                           }

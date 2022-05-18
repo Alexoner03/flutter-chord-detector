@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:guitar/providers/BackendProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -111,6 +113,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () async {
             final prefs = await SharedPreferences.getInstance();
             await prefs.remove("user");
+            await Provider.of<BackendProvider>(context, listen: false).clear();
             Navigator.pushReplacementNamed(context, '/');
           },
           style: ElevatedButton.styleFrom(

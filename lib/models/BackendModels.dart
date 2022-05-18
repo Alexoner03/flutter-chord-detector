@@ -53,12 +53,12 @@ class Sound {
 
   String name;
   bool passed;
-  int score;
+  double score;
 
   factory Sound.fromJson(Map<String, dynamic> json) => Sound(
     name: json["name"],
     passed: json["passed"],
-    score: json["score"],
+    score: json["score"] is int ? (json["score"] as int).toDouble() : json["score"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -75,11 +75,11 @@ class Test {
   });
 
   String level;
-  int score;
+  double score;
 
   factory Test.fromJson(Map<String, dynamic> json) => Test(
     level: json["level"],
-    score: json["score"],
+    score: json["score"] is int ? (json["score"] as int).toDouble() : json["score"],
   );
 
   Map<String, dynamic> toJson() => {

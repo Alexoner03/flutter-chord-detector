@@ -1,7 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:guitar/models/BackendModels.dart';
 import 'package:tflite_audio/tflite_audio.dart';
+import 'package:guitar/providers/BackendProvider.dart';
+import 'package:provider/provider.dart';
 
 class TestAudio extends StatefulWidget {
   final int type;
@@ -86,7 +87,6 @@ class _TestAudioState extends State<TestAudio> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -120,17 +120,6 @@ class _TestAudioState extends State<TestAudio> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              // Container(
-              //   padding: const EdgeInsets.all(20),
-              //   child: Text(
-              //     "Toca la " + types[widget.type - 1] + " " + widget.arg,
-              //     style: const TextStyle(
-              //       color: Colors.white,
-              //       fontSize: 30,
-              //       fontWeight: FontWeight.w200,
-              //     ),
-              //   ),
-              // ),
               Image(
                 image: AssetImage(image),
                 height: MediaQuery.of(context).size.height * 0.5,
@@ -165,6 +154,31 @@ class _TestAudioState extends State<TestAudio> {
     });
 
     super.dispose();
+
+  }
+
+
+  sendToBackend(double score) async {
+    UserInfo _userInfo = Provider.of<BackendProvider>(context).userInfo!;
+
+
+    if(widget.type == 1) {
+      List<Sound> notes = _userInfo.notes.map((e) {
+        if(e.name == widget.arg){
+          e.score = score;
+        }
+        return e;
+      }).toList();
+      await Provider.of<BackendProvider>(context).updateNotes(notes);
+    }else {
+      List<Sound> chords = _userInfo.chords.map((e) {
+        if(e.name == widget.arg){
+          e.score = score;
+        }
+        return e;
+      }).toList();
+      await Provider.of<BackendProvider>(context).updateChords(chords);
+    }
 
   }
 }

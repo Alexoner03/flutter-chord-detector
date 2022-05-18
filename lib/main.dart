@@ -5,6 +5,7 @@ import 'package:guitar/pages/login.dart';
 import 'package:guitar/pages/register.dart';
 import 'package:guitar/pages/video.dart';
 import 'package:guitar/providers/AuthProvider.dart';
+import 'package:guitar/providers/BackendProvider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'pages/LearnAcordes.dart';
@@ -41,6 +42,7 @@ class ProviderApp extends StatelessWidget {
     return MultiProvider(
       providers : [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => BackendProvider()),
       ],
       child : const MyApp()
     );

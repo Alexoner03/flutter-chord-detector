@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guitar/models/BackendModels.dart';
 import 'package:guitar/pages/TestAudio.dart';
+import 'package:guitar/providers/BackendProvider.dart';
+import 'package:provider/provider.dart';
 
 class LearnCuerdas extends StatefulWidget {
   const LearnCuerdas({Key? key}) : super(key: key);
@@ -9,9 +12,13 @@ class LearnCuerdas extends StatefulWidget {
 }
 
 class _LearnCuerdasState extends State<LearnCuerdas> {
+  late UserInfo _userInfo;
 
   @override
   Widget build(BuildContext context) {
+
+    _userInfo = Provider.of<BackendProvider>(context).userInfo!;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Lista de Cuerdas"),
@@ -33,7 +40,7 @@ class _LearnCuerdasState extends State<LearnCuerdas> {
     );
   }
 
-  Widget _lista(){
+  Widget _lista() {
 
     final cuerdas = [
       "A",
@@ -47,9 +54,16 @@ class _LearnCuerdasState extends State<LearnCuerdas> {
     return ListView.builder(
         itemCount: cuerdas.length,
         itemBuilder: (context, i) {
+
+          Sound sound = getSound(cuerdas[i]);
+
           return ListTile(
-            trailing: const Icon(Icons.music_note),
+            trailing: Icon(
+              sound.passed ? Icons.check : Icons.close,
+              color: sound.passed ? Colors.green : Colors.red,
+            ),
             title: Text("Tocar " + cuerdas[i]),
+            subtitle: Text("Ultima puntuación: " + sound.score.toString()),
             onTap: () {
               Navigator.push(
                   context,
@@ -60,6 +74,11 @@ class _LearnCuerdasState extends State<LearnCuerdas> {
         }
     );
   }
-
+  
+  Sound getSound(String note){
+    return _userInfo
+        .notes
+        .firstWhere((element) => element.name == note);
+  }
 }
 
