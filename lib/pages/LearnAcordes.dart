@@ -63,7 +63,7 @@ class _LearnAcordesState extends State<LearnAcordes> {
               color: sound.passed ? Colors.green : Colors.red,
             ),
             title: Text("Tocar " + acordes[i]),
-            subtitle: Text("Ultima puntuación: " + ((sound.score * 100) / 1).toString() + "%"),
+            subtitle: Text("Ultima puntuación: " + ((sound.score * 100) / 1).toStringAsPrecision(3) + "%"),
             onTap: () {
               Navigator.push(
                   context,

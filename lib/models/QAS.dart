@@ -78,8 +78,8 @@ class QAS {
           Question("Reconoce que acordes y cuerdas al aire está sonando", "3_1", QuestionType.audio,
               [
                 Answer("Acorde DO, Cuerda SOL, Acorde LA", true),
-                Answer("Acorde DO, Cuerda SOL, Acorde LA", false),
-                Answer("Acorde DO, Cuerda SOL, Acorde LA", false),
+                Answer("Acorde RE, Cuerda MI, Acorde SI", false),
+                Answer("Acorde SOL, Cuerda LA, Acorde FA", false),
               ]
           ),
           Question("¿Los siguientes acordes son los mismos? ¿Qué acorde(s) son/es?", "3_2", QuestionType.audio,

@@ -21,38 +21,50 @@ class BackendService {
 
     var url = Uri.https(BackendService.url,"/api/user");
 
-    var response = await http.post(url, body: { email });
+    var response = await http.post(url, body: convert.jsonEncode({ email }), headers: {
+      "Accept" : "application/json",
+      "Content-type" : "application/json"
+    });
 
     return UserInfo.fromJson(convert.jsonDecode(response.body));
   }
 
   static Future<UserInfo> updateChords(String email, List<Sound> chords) async {
-    final _chords = convert.jsonEncode(chords.map((e) => e.toJson()).toList());
+    final _chords = chords.map((e) => e.toJson()).toList();
 
     var url = Uri.https(BackendService.url,"/api/user/chords");
 
-    var response = await http.put(url, body: { "email" : email, "chords" : _chords });
+    var response = await http.put(url, body: convert.jsonEncode({ "email" : email, "chords" : _chords }), headers: {
+    "Accept" : "application/json",
+    "Content-type" : "application/json"
+    });
 
     return UserInfo.fromJson(convert.jsonDecode(response.body));
   }
 
   static Future<UserInfo> updateNotes(String email, List<Sound> notes) async {
 
-    final _notes = convert.jsonEncode(notes.map((e) => e.toJson()).toList());
+    final _notes = notes.map((e) => e.toJson()).toList();
 
     var url = Uri.https(BackendService.url,"/api/user/notes");
 
-    var response = await http.put(url, body: { "email" : email, "notes" : _notes}, );
+    var response = await http.put(url, body: convert.jsonEncode({ "email" : email, "notes" : _notes}), headers: {
+      "Accept" : "application/json",
+      "Content-type" : "application/json"
+    });
 
     return UserInfo.fromJson(convert.jsonDecode(response.body));
   }
 
   static Future<UserInfo> updateTests(String email, List<Test> tests) async {
-    final _tests = convert.jsonEncode(tests.map((e) => e.toJson()).toList());
+    final _tests = tests.map((e) => e.toJson()).toList();
 
     var url = Uri.https(BackendService.url,"/api/user/tests");
 
-    var response = await http.put(url, body: { "email" : email, "tests": _tests });
+    var response = await http.put(url, body: convert.jsonEncode({ "email" : email, "tests": _tests }),headers: {
+      "Accept" : "application/json",
+      "Content-type" : "application/json"
+    });
 
     return UserInfo.fromJson(convert.jsonDecode(response.body));
   }

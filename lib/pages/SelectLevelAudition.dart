@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:guitar/models/BackendModels.dart';
 import 'LearnAudition.dart';
 import 'package:guitar/models/QAS.dart';
+import 'package:guitar/providers/BackendProvider.dart';
+import 'package:provider/provider.dart';
 
 class SelectLevelAudition extends StatefulWidget {
   const SelectLevelAudition(
@@ -14,9 +17,13 @@ class SelectLevelAudition extends StatefulWidget {
 }
 
 class _SelectLevelAuditionState extends State<SelectLevelAudition> {
+  late UserInfo _userInfo;
 
   @override
   Widget build(BuildContext context) {
+
+    _userInfo = Provider.of<BackendProvider>(context).userInfo!;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Selecciona un nivel"),
@@ -49,9 +56,16 @@ class _SelectLevelAuditionState extends State<SelectLevelAudition> {
     return ListView.builder(
         itemCount: niveles.length,
         itemBuilder: (context, i) {
+
+          final result = getScore(int.parse(niveles[i]));
+
           return ListTile(
-            trailing: const Icon(Icons.music_note),
+            trailing: Icon(
+              result >= 75 ? Icons.check : Icons.close,
+              color: result >= 75  ? Colors.green : Colors.red,
+            ),
             title: Text("Nivel " + niveles[i]),
+            subtitle: Text("Ultima puntuación: " + result.toStringAsPrecision(3) + "%"),
             onTap: () {
               Navigator.push(
                   context,
@@ -68,5 +82,18 @@ class _SelectLevelAuditionState extends State<SelectLevelAudition> {
     );
   }
 
+  double getScore(int level){
+    final total = {
+      1 : 4,
+      2 : 4,
+      3 : 2
+    };
+
+    final mapper = ['one','two','three'];
+
+    final test = _userInfo.tests.firstWhere((element) => element.level == mapper[level - 1]);
+
+    return test.score;
+  }
 }
 

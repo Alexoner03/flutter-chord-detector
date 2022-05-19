@@ -194,6 +194,7 @@ class _TestAudioState extends State<TestAudio> {
       List<Sound> notes = _userInfo.notes.map((e) {
         if(e.name == widget.arg){
           e.score = score;
+          e.passed = true;
         }
         return e;
       }).toList();
