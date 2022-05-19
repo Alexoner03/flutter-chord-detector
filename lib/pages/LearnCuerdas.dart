@@ -63,7 +63,7 @@ class _LearnCuerdasState extends State<LearnCuerdas> {
               color: sound.passed ? Colors.green : Colors.red,
             ),
             title: Text("Tocar " + cuerdas[i]),
-            subtitle: Text("Ultima puntuación: " + sound.score.toString()),
+            subtitle: Text("Ultima puntuación: " + ((sound.score * 100) / 1).toString() + "%"),
             onTap: () {
               Navigator.push(
                   context,

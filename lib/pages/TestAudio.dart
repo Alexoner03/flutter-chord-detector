@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:guitar/models/BackendModels.dart';
+import 'package:guitar/utils/alert.dart';
 import 'package:tflite_audio/tflite_audio.dart';
 import 'package:guitar/providers/BackendProvider.dart';
 import 'package:provider/provider.dart';
@@ -39,11 +41,12 @@ class _TestAudioState extends State<TestAudio> {
       numThreads: 2,
       isAsset: true,
       inputType: 'rawAudio',
+      outputRawScores: true
     );
 
   }
 
-  void _recorder() {
+  void _recorder(BuildContext context) {
     String recognition = "";
     if (!_recording) {
       setState(() => _recording = true);
@@ -53,19 +56,25 @@ class _TestAudioState extends State<TestAudio> {
         sampleRate: 44100,
         audioLength: 44032,
         bufferSize: 22016,
-        detectionThreshold: 0.7
+        detectionThreshold: 0.7,
       );
       result.listen((event) {
         setState(() {
           _sound = "Escuchando...";
         });
+
         recognition = event["recognitionResult"];
-        if(recognition.split(" ")[1] == widget.arg){
+        String result = getGreater(event["recognitionResult"]);
+        double score = double.parse(result.split(" ")[1]);
+        if(result.split(" ")[0] == widget.arg && score >= 0.7){
           TfliteAudio.stopAudioRecognition();
           setState(() {
             _sound = "Excelente! Regresa para continuar";
             isOk = true;
           });
+
+          sendToBackend(score);
+          Utils.showMyDialogSound(context, score, widget.type == 1 ? '/cuerdas': '/acordes' );
         }else{
           isOk = false;
         }
@@ -77,6 +86,23 @@ class _TestAudioState extends State<TestAudio> {
         setState(() => _recording = false);
       });
     }
+  }
+
+  String getGreater(resultsArray) {
+    final labels = ['A', 'B', 'D', 'E', 'Egrave', 'G', 'Ruido de fondo'];
+    //conviertiendo a list
+    List<dynamic> listDynamic = jsonDecode(resultsArray);
+    List<double> listCopy = listDynamic.map((e) => e as double).toList();
+    List<double> listInt = listDynamic.map((e) => e as double).toList();
+
+    //encontrar el mayor
+    listInt.sort();
+    final lastValue = listInt[listInt.length - 1];
+    final lastIndex = listCopy.indexOf(lastValue);
+    return labels[lastIndex] + " " + lastValue.toStringAsPrecision(3);
+  }
+  void announce(double score) {
+
   }
 
   void _stop() {
@@ -127,7 +153,9 @@ class _TestAudioState extends State<TestAudio> {
                 fit: BoxFit.fitWidth,
               ),
               MaterialButton(
-                onPressed: _recorder,
+                onPressed: (){
+                  _recorder(context);
+                },
                 color: _recording ? Colors.grey : Colors.pink,
                 textColor: Colors.white,
                 child: const Icon(Icons.mic, size: 50),
@@ -159,7 +187,7 @@ class _TestAudioState extends State<TestAudio> {
 
 
   sendToBackend(double score) async {
-    UserInfo _userInfo = Provider.of<BackendProvider>(context).userInfo!;
+    UserInfo _userInfo = Provider.of<BackendProvider>(context,listen: false).userInfo!;
 
 
     if(widget.type == 1) {
@@ -169,7 +197,7 @@ class _TestAudioState extends State<TestAudio> {
         }
         return e;
       }).toList();
-      await Provider.of<BackendProvider>(context).updateNotes(notes);
+      await Provider.of<BackendProvider>(context,listen: false).updateNotes(notes);
     }else {
       List<Sound> chords = _userInfo.chords.map((e) {
         if(e.name == widget.arg){
@@ -177,7 +205,7 @@ class _TestAudioState extends State<TestAudio> {
         }
         return e;
       }).toList();
-      await Provider.of<BackendProvider>(context).updateChords(chords);
+      await Provider.of<BackendProvider>(context, listen: false).updateChords(chords);
     }
 
   }

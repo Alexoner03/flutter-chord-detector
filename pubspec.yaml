@@ -44,6 +44,7 @@ dependencies:
   cloud_firestore: ^3.1.15
   audioplayers: ^0.20.1
   http: ^0.13.4
+  countup: ^0.1.4
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,11 @@ flutter:
     - assets/chords/
     - assets/notes/
     - assets/exam/
+    - assets/video_new.mp4
+    - assets/logo.png
+    - assets/fondo.png
+    - assets/icon.png
+    - assets/clap.wav
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

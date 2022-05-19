@@ -21,7 +21,7 @@ void main() async {
 }
 
 ColorScheme defaultColorScheme = const ColorScheme(
-  primary: Color(0xffBB86FC),
+  primary: Color.fromRGBO(7, 188, 136, 1),
   secondary: Color(0xff03DAC6),
   surface: Color(0xff181818),
   background: Color(0xff121212),

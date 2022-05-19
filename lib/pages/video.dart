@@ -14,8 +14,8 @@ class _VideoPageState extends State<VideoPage> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.network(
-      'https://github.com/Alexoner03/alexoner03.github.io/blob/master/video.mp4?raw=true',
+    _controller = VideoPlayerController.asset(
+      'assets/video_new.mp4',
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
 

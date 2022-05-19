@@ -37,10 +37,12 @@ class _LoginPageState extends State<LoginPage> {
     if(str != null && str.isNotEmpty){
       final bool? video = prefs.getBool('video');
       await Provider.of<BackendProvider>(context, listen: false).getByEmail(str);
+
       if(video != null && video){
         await Navigator.pushReplacementNamed(context, '/home');
         return;
       }
+
       await prefs.setBool('video', true);
       await Navigator.pushReplacementNamed(context, '/video');
     }
@@ -51,17 +53,25 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/fondo.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Guitar Chord Detector',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  image: const AssetImage('assets/logo.png'),
+                )
+              ],
             ),
             const SizedBox(
               height: 60,
@@ -120,9 +130,9 @@ class _LoginPageState extends State<LoginPage> {
 
                           final bool? video = prefs.getBool('video');
                           await prefs.setString("user", response.user!.email!);
+                          await Provider.of<BackendProvider>(context, listen: false).getByEmail(response.user!.email!);
 
                           if(video != null && video){
-                            await Provider.of<BackendProvider>(context, listen: false).getByEmail(response.user!.email!);
                             await Navigator.pushReplacementNamed(context, '/home');
                             return;
                           }
